@@ -4,19 +4,20 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
 
-    <persistence-unit name="Your Unit Name">
+    <persistence-unit name="Unit">
+
+        <description>our first jpa example</description>
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/Your DB"/>
-            <property name="javax.persistence.jdbc.user" value="Your User"/>
-            <property name="javax.persistence.jdbc.password" value="Your Pass"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/hib_ex"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="123456"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
         </properties>
 
     </persistence-unit>
-
 </persistence>

@@ -9,7 +9,7 @@ public class HibernateUtil {
 
     static {
         entityMangerFactory =
-                Persistence.createEntityManagerFactory("Your Unit Name");
+                Persistence.createEntityManagerFactory("Unit");
     }
 
     public static EntityManagerFactory getEntityMangerFactory() {
