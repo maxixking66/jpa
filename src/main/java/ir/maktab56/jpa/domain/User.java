@@ -3,6 +3,8 @@ package ir.maktab56.jpa.domain;
 import ir.maktab56.jpa.base.domain.BaseEntity;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,6 +17,10 @@ public class User extends BaseEntity<Long> {
 
     private Integer age;
 
+    @OneToOne
+    @JoinColumn(name = "wallet_id")
+    private Wallet wallet;
+
     public User() {
     }
 
@@ -22,6 +28,21 @@ public class User extends BaseEntity<Long> {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
+    }
+
+    public User(String firstName, String lastName, Integer age, Wallet wallet) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.wallet = wallet;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 
     public String getFirstName() {
