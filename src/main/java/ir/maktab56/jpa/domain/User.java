@@ -2,10 +2,9 @@ package ir.maktab56.jpa.domain;
 
 import ir.maktab56.jpa.base.domain.BaseEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user_table")
@@ -20,6 +19,9 @@ public class User extends BaseEntity<Long> {
     @OneToOne
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
+
+    @OneToMany(mappedBy = "user")
+    private List<Article> articleList = new ArrayList<>();
 
     public User() {
     }
@@ -77,5 +79,13 @@ public class User extends BaseEntity<Long> {
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 '}';
+    }
+
+    public List<Article> getArticleList() {
+        return articleList;
+    }
+
+    public void setArticleList(List<Article> articleList) {
+        this.articleList = articleList;
     }
 }
