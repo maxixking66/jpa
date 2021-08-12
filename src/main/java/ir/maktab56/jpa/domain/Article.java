@@ -3,6 +3,8 @@ package ir.maktab56.jpa.domain;
 import ir.maktab56.jpa.base.domain.BaseEntity;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "article")
@@ -21,6 +23,13 @@ public class Article extends BaseEntity<Long> {
     @JoinColumn(name = "article_category_id")
     private ArticleCategory articleCategory;
 
+    @ManyToMany
+    @JoinTable(name = "article_tag_join_table",
+            joinColumns = @JoinColumn(name = "a_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "t_id", referencedColumnName = "id")
+    )
+    private Set<Tag> tagSet = new HashSet<>();
+
     public Article() {
     }
 
@@ -28,6 +37,14 @@ public class Article extends BaseEntity<Long> {
         this.title = title;
         this.content = content;
         this.user = user;
+    }
+
+    public Set<Tag> getTagSet() {
+        return tagSet;
+    }
+
+    public void setTagSet(Set<Tag> tagSet) {
+        this.tagSet = tagSet;
     }
 
     public ArticleCategory getArticleCategory() {
