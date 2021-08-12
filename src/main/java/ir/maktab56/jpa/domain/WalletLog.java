@@ -2,13 +2,12 @@ package ir.maktab56.jpa.domain;
 
 import ir.maktab56.jpa.base.domain.BaseEntity;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "wallet")
-public class Wallet extends BaseEntity<Long> {
+@Table(name = "wallet_log")
+public class WalletLog extends BaseEntity<Long> {
 
     private Long totalAmount;
 
@@ -16,35 +15,17 @@ public class Wallet extends BaseEntity<Long> {
 
     private Long cashAmount;
 
-    @OneToOne(mappedBy = "wallet")
-    private User user;
+    private Long creditAmountChange;
 
-    @OneToMany
-    @JoinColumn(name = "wallet_id")
-    private List<WalletLog> walletLogList = new ArrayList<>();
+    private Long cashAmountChange;
 
-    public Wallet() {
+    public WalletLog() {
     }
 
-    public Wallet(Long totalAmount, Long creditAmount, Long cashAmount) {
+    public WalletLog(Long totalAmount, Long creditAmount, Long cashAmount) {
         this.totalAmount = totalAmount;
         this.creditAmount = creditAmount;
         this.cashAmount = cashAmount;
-    }
-
-    public Wallet(Long totalAmount, Long creditAmount, Long cashAmount, User user) {
-        this.totalAmount = totalAmount;
-        this.creditAmount = creditAmount;
-        this.cashAmount = cashAmount;
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Long getTotalAmount() {
@@ -71,12 +52,20 @@ public class Wallet extends BaseEntity<Long> {
         this.cashAmount = cashAmount;
     }
 
-    public List<WalletLog> getWalletLogList() {
-        return walletLogList;
+    public Long getCreditAmountChange() {
+        return creditAmountChange;
     }
 
-    public void setWalletLogList(List<WalletLog> walletLogList) {
-        this.walletLogList = walletLogList;
+    public void setCreditAmountChange(Long creditAmountChange) {
+        this.creditAmountChange = creditAmountChange;
+    }
+
+    public Long getCashAmountChange() {
+        return cashAmountChange;
+    }
+
+    public void setCashAmountChange(Long cashAmountChange) {
+        this.cashAmountChange = cashAmountChange;
     }
 
     @Override

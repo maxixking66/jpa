@@ -17,6 +17,10 @@ public class Article extends BaseEntity<Long> {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "article_category_id")
+    private ArticleCategory articleCategory;
+
     public Article() {
     }
 
@@ -24,6 +28,14 @@ public class Article extends BaseEntity<Long> {
         this.title = title;
         this.content = content;
         this.user = user;
+    }
+
+    public ArticleCategory getArticleCategory() {
+        return articleCategory;
+    }
+
+    public void setArticleCategory(ArticleCategory articleCategory) {
+        this.articleCategory = articleCategory;
     }
 
     public String getTitle() {
