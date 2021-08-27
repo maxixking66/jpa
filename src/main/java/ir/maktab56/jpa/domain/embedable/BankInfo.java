@@ -1,6 +1,10 @@
 package ir.maktab56.jpa.domain.embedable;
 
+import ir.maktab56.jpa.domain.enumerated.BankType;
+
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.io.Serializable;
 
 @Embeddable
@@ -12,7 +16,16 @@ public class BankInfo implements Serializable {
 
     private String shebaNumber;
 
-    private String bank;
+    @Enumerated(EnumType.STRING)
+    private BankType bankType;
+
+    public BankType getBankType() {
+        return bankType;
+    }
+
+    public void setBankType(BankType bankType) {
+        this.bankType = bankType;
+    }
 
     public BankInfo() {
     }
@@ -21,14 +34,6 @@ public class BankInfo implements Serializable {
         this.accountNumber = accountNumber;
         this.cardNumber = cardNumber;
         this.shebaNumber = shebaNumber;
-    }
-
-    public String getBank() {
-        return bank;
-    }
-
-    public void setBank(String bank) {
-        this.bank = bank;
     }
 
     public String getAccountNumber() {
