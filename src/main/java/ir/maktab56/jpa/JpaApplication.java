@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 
 public class JpaApplication {
     public static void main(String[] args) {
-        testMergeWithNewInstance();
+        testRefreshCascade();
     }
 
     private static void testPersistCascade() {
@@ -88,6 +88,29 @@ public class JpaApplication {
 
         System.out.println("after detach - em contains user: " + entityManager.contains(user));
         System.out.println("after detach - em contains address: " + entityManager.contains(address));
+
+    }
+
+    private static void testRefreshCascade() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+
+        User user = entityManager.find(User.class, 2L);
+        Address address = user.getAddressList().get(0);
+
+        System.out.println("1. user firstName : " + user.getFirstName());
+        System.out.println("1. address : " + address.getAddress());
+
+        user.setFirstName("John");
+
+        address.setAddress("address...5");
+
+        System.out.println("2. user firstName : " + user.getFirstName());
+        System.out.println("2. address : " + address.getAddress());
+
+        entityManager.refresh(user);
+
+        System.out.println("3. user firstName : " + user.getFirstName());
+        System.out.println("3. address : " + address.getAddress());
 
     }
 
