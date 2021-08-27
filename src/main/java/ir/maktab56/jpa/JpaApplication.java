@@ -17,12 +17,22 @@ public class JpaApplication {
         UserService userService = ApplicationContext.getUserService();
 
         UserSearch userSearch = new UserSearch();
-        userSearch.setFirstName("m");
-//        userSearch.setLastName("e");
-        userSearch.setAge(37);
+//        userSearch.setFirstName("m");
+//        userSearch.setLastName("in");
+//        userSearch.setAge(37);
 
         List<User> userList = userService.searchOnUsers(userSearch);
         userList.forEach(System.out::println);
+
+        /*EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Integer> criteriaQuery = criteriaBuilder.createQuery(Integer.class);
+        Root<User> userRoot = criteriaQuery.from(User.class);
+
+        criteriaQuery.select(userRoot.get("age"));
+
+        List<Integer> resultList = entityManager.createQuery(criteriaQuery).getResultList();
+        resultList.forEach(System.out::println);*/
 
     }
 
