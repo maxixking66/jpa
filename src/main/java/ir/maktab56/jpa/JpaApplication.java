@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 
 public class JpaApplication {
     public static void main(String[] args) {
-        testRefreshCascade();
+        testRemoveCascade();
     }
 
     private static void testPersistCascade() {
@@ -112,6 +112,14 @@ public class JpaApplication {
         System.out.println("3. user firstName : " + user.getFirstName());
         System.out.println("3. address : " + address.getAddress());
 
+    }
+
+    private static void testRemoveCascade() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        entityManager.getTransaction().begin();
+        User user = entityManager.find(User.class, 2L);
+        entityManager.remove(user);
+        entityManager.getTransaction().commit();
     }
 
     private static void testQueries(UserService userService) {
