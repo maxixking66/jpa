@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 
 public class JpaApplication {
     public static void main(String[] args) {
-        testDetachCascade();
+        testMergeWithNewInstance();
     }
 
     private static void testPersistCascade() {
@@ -38,14 +38,36 @@ public class JpaApplication {
         entityManager.getTransaction().begin();
 
         User user = entityManager.find(User.class, 2L);
-//        user.setFirstName("John2");
+        user.setFirstName("John");
 //        user.setLastName("Doe2");
 
         Address address = user.getAddressList().get(0);
         address.setAddress("Address....");
         address.setPostalCode("PostalCode....");
 
+        System.out.println("before merge - em contains user: " + entityManager.contains(user));
         entityManager.merge(user);
+        System.out.println("after merge - em contains user: " + entityManager.contains(user));
+
+        user.setFirstName("mohsen");
+
+        entityManager.getTransaction().commit();
+    }
+
+    private static void testMergeWithNewInstance() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+
+        entityManager.getTransaction().begin();
+
+        User user = new User();
+        user.setFirstName("John");
+
+        System.out.println("before merge - em contains user: " + entityManager.contains(user));
+        User mergedUser = entityManager.merge(user);
+        System.out.println("after merge - em contains user: " + entityManager.contains(user));
+
+        user.setFirstName("mohsen");
+        mergedUser.setFirstName("mohsen");
 
         entityManager.getTransaction().commit();
     }
