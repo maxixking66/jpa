@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 
 public class JpaApplication {
     public static void main(String[] args) {
-        testMergeCascade();
+        testDetachCascade();
     }
 
     private static void testPersistCascade() {
@@ -48,6 +48,25 @@ public class JpaApplication {
         entityManager.merge(user);
 
         entityManager.getTransaction().commit();
+    }
+
+    private static void testDetachCascade() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+
+        User user = entityManager.find(User.class, 2L);
+
+        System.out.println("addressList size: " + user.getAddressList().size());
+
+        Address address = user.getAddressList().get(0);
+
+        System.out.println("before detach - em contains user: " + entityManager.contains(user));
+        System.out.println("before detach - em contains address: " + entityManager.contains(address));
+
+        entityManager.detach(user);
+
+        System.out.println("after detach - em contains user: " + entityManager.contains(user));
+        System.out.println("after detach - em contains address: " + entityManager.contains(address));
+
     }
 
     private static void testQueries(UserService userService) {
