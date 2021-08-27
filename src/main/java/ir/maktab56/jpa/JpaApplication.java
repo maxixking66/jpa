@@ -3,15 +3,23 @@ package ir.maktab56.jpa;
 import ir.maktab56.jpa.domain.Address;
 import ir.maktab56.jpa.domain.User;
 import ir.maktab56.jpa.service.UserService;
+import ir.maktab56.jpa.service.dto.UserSearch;
 import ir.maktab56.jpa.util.ApplicationContext;
 import ir.maktab56.jpa.util.HibernateUtil;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class JpaApplication {
     public static void main(String[] args) {
         UserService userService = ApplicationContext.getUserService();
+        UserSearch userSearch = new UserSearch();
+        userSearch.setFirstName("mo");
+//        userSearch.setAge(28);
+        userSearch.setUsername("mo");
 
+        List<User> users = userService.searchOnUsers(userSearch);
+        System.out.println(users);
     }
 
     private static void testPersistCascade() {

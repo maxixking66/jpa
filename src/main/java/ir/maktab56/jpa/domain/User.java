@@ -19,6 +19,10 @@ public class User extends BaseEntity<Long> {
 
     private Integer age;
 
+    private String username;
+
+    private String email;
+
     @Embedded
     private BankInfo bankInfo;
 
@@ -59,6 +63,22 @@ public class User extends BaseEntity<Long> {
         this.lastName = lastName;
         this.age = age;
         this.wallet = wallet;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Set<Long> getIds() {
