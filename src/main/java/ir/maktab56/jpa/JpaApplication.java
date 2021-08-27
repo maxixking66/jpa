@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 
 public class JpaApplication {
     public static void main(String[] args) {
-
+        testMergeCascade();
     }
 
     private static void testPersistCascade() {
@@ -28,6 +28,24 @@ public class JpaApplication {
         user.getAddressList().add(address);
 
         entityManager.persist(user);
+
+        entityManager.getTransaction().commit();
+    }
+
+    private static void testMergeCascade() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+
+        entityManager.getTransaction().begin();
+
+        User user = entityManager.find(User.class, 2L);
+//        user.setFirstName("John2");
+//        user.setLastName("Doe2");
+
+        Address address = user.getAddressList().get(0);
+        address.setAddress("Address....");
+        address.setPostalCode("PostalCode....");
+
+        entityManager.merge(user);
 
         entityManager.getTransaction().commit();
     }
