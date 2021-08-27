@@ -23,6 +23,10 @@ public class User extends BaseEntity<Long> {
     @OneToMany(mappedBy = "user")
     private List<Article> articleList = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<Address> addressList = new ArrayList<>();
+
     public User() {
     }
 
@@ -87,5 +91,13 @@ public class User extends BaseEntity<Long> {
 
     public void setArticleList(List<Article> articleList) {
         this.articleList = articleList;
+    }
+
+    public List<Address> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
     }
 }
