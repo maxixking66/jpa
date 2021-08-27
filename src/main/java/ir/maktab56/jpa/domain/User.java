@@ -26,6 +26,14 @@ public class User extends BaseEntity<Long> {
     @JoinTable(name = "us_mob_nu")
     private Set<String> mobileNumbers = new HashSet<>();
 
+    @ElementCollection
+    @JoinTable(name = "us_mob_nu")
+    private Set<Long> ids = new HashSet<>();
+
+    @ElementCollection
+    @JoinTable(name = "user_bank_infos")
+    private Set<BankInfo> bankInfoSet = new HashSet<>();
+
     @OneToOne
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
@@ -51,6 +59,22 @@ public class User extends BaseEntity<Long> {
         this.lastName = lastName;
         this.age = age;
         this.wallet = wallet;
+    }
+
+    public Set<Long> getIds() {
+        return ids;
+    }
+
+    public void setIds(Set<Long> ids) {
+        this.ids = ids;
+    }
+
+    public Set<BankInfo> getBankInfoSet() {
+        return bankInfoSet;
+    }
+
+    public void setBankInfoSet(Set<BankInfo> bankInfoSet) {
+        this.bankInfoSet = bankInfoSet;
     }
 
     public Set<String> getMobileNumbers() {
