@@ -17,6 +17,6 @@ public class UserServiceImpl extends BaseEntityServiceImpl<User, Long, UserRepos
 
     @Override
     public List<User> searchOnUsers(UserSearch userSearch) {
-        return null;
+        return repository.searchOnUsers(userSearch);
     }
 }

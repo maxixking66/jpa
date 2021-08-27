@@ -152,6 +152,8 @@ public class User extends BaseEntity<Long> {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 

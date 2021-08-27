@@ -1,5 +1,6 @@
 package ir.maktab56.jpa;
 
+import com.github.javafaker.Faker;
 import ir.maktab56.jpa.domain.Address;
 import ir.maktab56.jpa.domain.User;
 import ir.maktab56.jpa.service.UserService;
@@ -9,17 +10,44 @@ import ir.maktab56.jpa.util.HibernateUtil;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class JpaApplication {
     public static void main(String[] args) {
         UserService userService = ApplicationContext.getUserService();
-        UserSearch userSearch = new UserSearch();
-        userSearch.setFirstName("mo");
-//        userSearch.setAge(28);
-        userSearch.setUsername("mo");
 
-        List<User> users = userService.searchOnUsers(userSearch);
-        System.out.println(users);
+        UserSearch userSearch = new UserSearch();
+        userSearch.setFirstName("m");
+//        userSearch.setLastName("e");
+        userSearch.setAge(37);
+
+        List<User> userList = userService.searchOnUsers(userSearch);
+        userList.forEach(System.out::println);
+
+    }
+
+    private static void insertUser() {
+        UserService userService = ApplicationContext.getUserService();
+        Faker faker = new Faker();
+        IntStream.range(0, 50).forEach(i -> {
+            User user = new User();
+            user.setFirstName(
+                    faker.name().firstName()
+            );
+            user.setLastName(
+                    faker.name().lastName()
+            );
+            user.setUsername(
+                    faker.name().username()
+            );
+            user.setAge(
+                    faker.number().numberBetween(5, 100)
+            );
+            user.setEmail(
+                    faker.name().fullName()
+            );
+            userService.save(user);
+        });
     }
 
     private static void testPersistCascade() {
