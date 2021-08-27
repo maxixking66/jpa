@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 public class JpaApplication {
     public static void main(String[] args) {
         UserService userService = ApplicationContext.getUserService();
+
     }
 
     private static void testPersistCascade() {

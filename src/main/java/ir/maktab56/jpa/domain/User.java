@@ -5,7 +5,9 @@ import ir.maktab56.jpa.domain.embedable.BankInfo;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_table")
@@ -19,6 +21,10 @@ public class User extends BaseEntity<Long> {
 
     @Embedded
     private BankInfo bankInfo;
+
+    @ElementCollection
+    @JoinTable(name = "us_mob_nu")
+    private Set<String> mobileNumbers = new HashSet<>();
 
     @OneToOne
     @JoinColumn(name = "wallet_id")
@@ -45,6 +51,14 @@ public class User extends BaseEntity<Long> {
         this.lastName = lastName;
         this.age = age;
         this.wallet = wallet;
+    }
+
+    public Set<String> getMobileNumbers() {
+        return mobileNumbers;
+    }
+
+    public void setMobileNumbers(Set<String> mobileNumbers) {
+        this.mobileNumbers = mobileNumbers;
     }
 
     public BankInfo getBankInfo() {
