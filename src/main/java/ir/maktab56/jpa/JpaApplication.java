@@ -3,13 +3,14 @@ package ir.maktab56.jpa;
 import ir.maktab56.jpa.domain.Address;
 import ir.maktab56.jpa.domain.User;
 import ir.maktab56.jpa.service.UserService;
+import ir.maktab56.jpa.util.ApplicationContext;
 import ir.maktab56.jpa.util.HibernateUtil;
 
 import javax.persistence.EntityManager;
 
 public class JpaApplication {
     public static void main(String[] args) {
-        testRemoveCascade();
+        UserService userService = ApplicationContext.getUserService();
     }
 
     private static void testPersistCascade() {

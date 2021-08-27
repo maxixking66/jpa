@@ -1,6 +1,7 @@
 package ir.maktab56.jpa.domain;
 
 import ir.maktab56.jpa.base.domain.BaseEntity;
+import ir.maktab56.jpa.domain.embedable.BankInfo;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ public class User extends BaseEntity<Long> {
     private String lastName;
 
     private Integer age;
+
+    @Embedded
+    private BankInfo bankInfo;
 
     @OneToOne
     @JoinColumn(name = "wallet_id")
@@ -41,6 +45,14 @@ public class User extends BaseEntity<Long> {
         this.lastName = lastName;
         this.age = age;
         this.wallet = wallet;
+    }
+
+    public BankInfo getBankInfo() {
+        return bankInfo;
+    }
+
+    public void setBankInfo(BankInfo bankInfo) {
+        this.bankInfo = bankInfo;
     }
 
     public Wallet getWallet() {
