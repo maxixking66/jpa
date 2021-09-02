@@ -21,6 +21,26 @@ public class JpaApplication {
 
     }
 
+    private static void testProjectionWithArrayObject() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);
+        Root<User> userRoot = criteriaQuery.from(User.class);
+
+        criteriaQuery.multiselect(
+                userRoot.get("firstName"),
+                userRoot.get("lastName")
+        );
+
+        List<Object[]> resultList = entityManager.createQuery(criteriaQuery).getResultList();
+
+        resultList.forEach(data ->
+                System.out.println(
+                        "firstName : " + data[0] + "\t" + "lastName : " + data[1]
+                )
+        );
+    }
+
     private static void countQuery() {
         EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
