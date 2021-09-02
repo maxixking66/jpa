@@ -10,6 +10,7 @@ import ir.maktab56.jpa.util.ApplicationContext;
 import ir.maktab56.jpa.util.HibernateUtil;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -18,8 +19,36 @@ import java.util.stream.IntStream;
 
 public class JpaApplication {
     public static void main(String[] args) {
-
     }
+
+    private static void testProjectionWithTuple() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
+        Root<User> userRoot = criteriaQuery.from(User.class);
+
+        criteriaQuery.multiselect(
+                userRoot.get("firstName").alias("fn"),
+                userRoot.get("lastName").alias("ln"),
+                userRoot.get("age").alias("ag")
+        );
+
+        criteriaQuery.where(
+                criteriaBuilder.like(
+                        userRoot.get("firstName"), "%m%"
+                )
+        );
+
+        List<Tuple> resultList = entityManager.createQuery(criteriaQuery).getResultList();
+
+        resultList.forEach(data ->
+                System.out.println(
+                        "firstName : " + data.get("fn") + "\tlastName : " + data.get("ln") +
+                                "\tage : " + data.get("ag")
+                )
+        );
+    }
+
 
     private static void testProjectionWithArrayObject() {
         EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
