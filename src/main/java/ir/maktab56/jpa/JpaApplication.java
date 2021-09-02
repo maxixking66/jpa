@@ -5,6 +5,7 @@ import ir.maktab56.jpa.domain.Address;
 import ir.maktab56.jpa.domain.User;
 import ir.maktab56.jpa.service.UserService;
 import ir.maktab56.jpa.service.dto.UserFirstNameLastName;
+import ir.maktab56.jpa.service.dto.UserSearch;
 import ir.maktab56.jpa.util.ApplicationContext;
 import ir.maktab56.jpa.util.HibernateUtil;
 
@@ -17,26 +18,10 @@ import java.util.stream.IntStream;
 
 public class JpaApplication {
     public static void main(String[] args) {
-//        UserService userService = ApplicationContext.getUserService();
 
-//        UserSearch userSearch = new UserSearch();
-//        userSearch.setFirstName("m");
-//        userSearch.setLastName("in");
-//        userSearch.setAge(37);
+    }
 
-//        List<User> userList = userService.searchOnUsers(userSearch);
-//        userList.forEach(System.out::println);
-
-        /*EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Integer> criteriaQuery = criteriaBuilder.createQuery(Integer.class);
-        Root<User> userRoot = criteriaQuery.from(User.class);
-
-        criteriaQuery.select(userRoot.get("age"));
-
-        List<Integer> resultList = entityManager.createQuery(criteriaQuery).getResultList();
-        resultList.forEach(System.out::println);*/
-
+    private static void countQuery() {
         EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
@@ -44,18 +29,40 @@ public class JpaApplication {
         criteriaQuery.distinct(true);
         criteriaQuery.select(criteriaBuilder.count(userRoot.get("age")));
 
-//        List<Long> resultList = entityManager.createQuery(criteriaQuery).getResultList();
         Long count = entityManager.createQuery(criteriaQuery).getSingleResult();
         System.out.println(count);
+    }
 
-        List<UserFirstNameLastName> resultList = entityManager.createQuery(
+    private static void testSimpleProjection() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Integer> criteriaQuery = criteriaBuilder.createQuery(Integer.class);
+        Root<User> userRoot = criteriaQuery.from(User.class);
+
+        criteriaQuery.select(userRoot.get("age"));
+
+        List<Integer> resultList = entityManager.createQuery(criteriaQuery).getResultList();
+        resultList.forEach(System.out::println);
+
+        List<UserFirstNameLastName> projectionList = entityManager.createQuery(
                 "select new ir.maktab56.jpa.service.dto" +
                         ".UserFirstNameLastName(u.firstName, u.lastName) from User u",
                 UserFirstNameLastName.class
         ).getResultList();
 
-        resultList.forEach(System.out::println);
+        projectionList.forEach(System.out::println);
+    }
 
+    private static void testSearchOnUser() {
+        UserService userService = ApplicationContext.getUserService();
+
+        UserSearch userSearch = new UserSearch();
+        userSearch.setFirstName("m");
+        userSearch.setLastName("in");
+        userSearch.setAge(37);
+
+        List<User> userList = userService.searchOnUsers(userSearch);
+        userList.forEach(System.out::println);
     }
 
     private static void insertUser() {
