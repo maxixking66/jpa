@@ -11,9 +11,34 @@ import java.util.Set;
 
 @Entity
 @Table(name = User.TABLE_NAME)
+@NamedEntityGraphs(
+        value = {
+                @NamedEntityGraph(name = User.FETCH_WALLET_AND_ADDRESS,
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "wallet"),
+                                @NamedAttributeNode(value = "addressList", subgraph = "addressList_child")
+                        },
+                        subgraphs = {
+                                @NamedSubgraph(name = "addressList_child",
+                                        attributeNodes = {
+                                                @NamedAttributeNode(value = "bankInfoSet"),
+                                        }
+                                )
+                        }
+                ),
+                @NamedEntityGraph(name = User.FETCH_WALLET_AND_ARTICLE,
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "wallet"),
+                                @NamedAttributeNode(value = "articleList")
+                        }
+                ),
+        }
+)
 public class User extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "user_table";
+    public static final String FETCH_WALLET_AND_ADDRESS = "FETCH_WALLET_AND_ADDRESS";
+    public static final String FETCH_WALLET_AND_ARTICLE = "FETCH_WALLET_AND_ARTICLE";
 
     public static final String FIRST_NAME = "firstName";
 
@@ -43,7 +68,7 @@ public class User extends BaseEntity<Long> {
     @JoinTable(name = "user_bank_infos")
     private Set<BankInfo> bankInfoSet = new HashSet<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 
@@ -154,7 +179,7 @@ public class User extends BaseEntity<Long> {
     public String toString() {
         return "User{" +
                 "id='" + getId() + '\'' +
-                "firstName='" + firstName + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", username='" + username + '\'' +

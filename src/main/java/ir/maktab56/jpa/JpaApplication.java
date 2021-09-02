@@ -9,16 +9,114 @@ import ir.maktab56.jpa.service.dto.UserSearch;
 import ir.maktab56.jpa.util.ApplicationContext;
 import ir.maktab56.jpa.util.HibernateUtil;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class JpaApplication {
+
+    public static final String FETCH_GRAPH = "javax.persistence.fetchgraph";
+    public static final String LOAD_GRAPH = "javax.persistence.loadgraph";
+
     public static void main(String[] args) {
+
+        testEntityGraphWithAnnotation();
+    }
+
+    private static void testEntityGraphWithAnnotation() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+        criteriaQuery.select(root);
+
+        TypedQuery<User> typedQuery = entityManager.createQuery(criteriaQuery);
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph(User.FETCH_WALLET_AND_ADDRESS);
+        typedQuery.setHint(
+                FETCH_GRAPH, entityGraph
+        );
+        List<User> userList = typedQuery.getResultList();
+        userList.forEach(user -> {
+            System.out.println(user.getWallet().getCashAmount());
+            System.out.println(user.getAddressList().size());
+        });
+        System.out.println(userList.size());
+    }
+
+    private static void testEntityGraph() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+        criteriaQuery.select(root);
+
+        TypedQuery<User> typedQuery = entityManager.createQuery(criteriaQuery);
+        EntityGraph<User> entityGraph = entityManager.createEntityGraph(User.class);
+        entityGraph.addAttributeNodes("wallet", "addressList");
+        typedQuery.setHint(
+                FETCH_GRAPH, entityGraph
+        );
+        List<User> userList = typedQuery.getResultList();
+        userList.forEach(user -> {
+            System.out.println(user.getWallet().getCashAmount());
+            System.out.println(user.getAddressList().size());
+        });
+        System.out.println(userList.size());
+    }
+
+    private static void showFetchTypes() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        List<User> resultList = entityManager.createQuery("from User", User.class).getResultList();
+
+        /*Wallet wallet = resultList.get(0).getWallet();
+        System.out.println(wallet.getCashAmount());*/
+
+//        entityManager.close();
+
+        resultList.forEach(user -> {
+            System.out.println(user.getWallet().getCashAmount());
+            System.out.println(user.getAddressList().size());
+        });
+
+        System.out.println();
+        System.out.println(resultList.size());
+    }
+
+    private static void getUsersAndAddWalletAndAddressToThem() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        entityManager.getTransaction().begin();
+
+        Faker faker = new Faker();
+
+        List<User> resultList = entityManager.createQuery("from User", User.class).getResultList();
+
+        resultList.forEach(user -> {
+            if (user.getAddressList() == null) {
+                user.setAddressList(new ArrayList<>());
+            }
+            user.setWallet(new Wallet());
+            IntStream.range(0, 3).forEach(i -> {
+                user.getAddressList().add(
+                        new Address(
+                                faker.address().fullAddress(),
+                                faker.address().zipCode()
+                        )
+                );
+            });
+            entityManager.merge(user);
+        });
+
+        entityManager.getTransaction().commit();
+    }
+
+    private static void testInheritance() {
         EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
         entityManager.getTransaction().begin();
         Profile profile = new Profile();
@@ -47,9 +145,6 @@ public class JpaApplication {
         System.out.println();
         entityManager.createQuery("from Customer ", Customer.class).getResultList()
                 .forEach(System.out::println);
-
-
-//   minio
     }
 
     private static void testProjectionWithNativeQuery() {
