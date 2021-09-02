@@ -68,7 +68,7 @@ public class User extends BaseEntity<Long> {
     @JoinTable(name = "user_bank_infos")
     private Set<BankInfo> bankInfoSet = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 

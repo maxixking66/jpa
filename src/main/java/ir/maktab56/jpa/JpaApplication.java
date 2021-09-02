@@ -27,7 +27,24 @@ public class JpaApplication {
 
     public static void main(String[] args) {
 
-        testEntityGraphWithAnnotation();
+        testPageQuery();
+    }
+
+    private static void testPageQuery() {
+        int page = 1;
+        int size = 5;
+
+
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+        criteriaQuery.select(root);
+
+        TypedQuery<User> typedQuery = entityManager.createQuery(criteriaQuery);
+        typedQuery.setMaxResults(size).setFirstResult(page * size);
+        List<User> userList = typedQuery.getResultList();
+        System.out.println(userList.get(0).getId());
     }
 
     private static void testEntityGraphWithAnnotation() {
