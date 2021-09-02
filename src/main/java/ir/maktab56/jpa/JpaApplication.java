@@ -83,7 +83,7 @@ public class JpaApplication {
                     faker.number().numberBetween(5, 100)
             );
             user.setEmail(
-                    faker.name().fullName()
+                    faker.internet().emailAddress()
             );
             userService.save(user);
         });
