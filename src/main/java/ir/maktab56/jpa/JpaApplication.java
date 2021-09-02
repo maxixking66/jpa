@@ -19,6 +19,17 @@ import java.util.stream.IntStream;
 
 public class JpaApplication {
     public static void main(String[] args) {
+        testProjectionWithNativeQuery();
+    }
+
+    private static void testProjectionWithNativeQuery() {
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        List<String> resultList = entityManager.createNativeQuery(
+                "select u." + User.FIRST_NAME + " as firstName from " + User.TABLE_NAME + " as u"
+        ).getResultList();
+
+//        resultList.forEach(data -> System.out.println(data.getFirstName()));
+        resultList.forEach(System.out::println);
     }
 
     private static void testProjectionWithTuple() {

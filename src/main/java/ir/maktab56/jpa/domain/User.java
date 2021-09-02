@@ -10,9 +10,14 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "user_table")
+@Table(name = User.TABLE_NAME)
 public class User extends BaseEntity<Long> {
 
+    public static final String TABLE_NAME = "user_table";
+
+    public static final String FIRST_NAME = "firstName";
+
+    @Column(name = FIRST_NAME)
     private String firstName;
 
     private String lastName;
