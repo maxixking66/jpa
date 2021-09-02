@@ -1,8 +1,8 @@
 package ir.maktab56.jpa;
 
 import com.github.javafaker.Faker;
-import ir.maktab56.jpa.domain.Address;
-import ir.maktab56.jpa.domain.User;
+import ir.maktab56.jpa.domain.*;
+import ir.maktab56.jpa.domain.enumerated.ProfileType;
 import ir.maktab56.jpa.service.UserService;
 import ir.maktab56.jpa.service.dto.UserFirstNameLastName;
 import ir.maktab56.jpa.service.dto.UserSearch;
@@ -19,7 +19,37 @@ import java.util.stream.IntStream;
 
 public class JpaApplication {
     public static void main(String[] args) {
-        testProjectionWithNativeQuery();
+        EntityManager entityManager = HibernateUtil.getEntityMangerFactory().createEntityManager();
+        entityManager.getTransaction().begin();
+        Profile profile = new Profile();
+        profile.setFirstName("profile");
+        entityManager.persist(profile);
+
+        Customer customer = new Customer();
+        customer.setFirstName("customer");
+        customer.setCustomerCode("123456");
+        entityManager.persist(customer);
+
+        Admin admin = new Admin();
+        admin.setFirstName("admin");
+        admin.setSuperAdmin(true);
+//        admin.setProfileType(ProfileType.ADMIN.name()/*ADMIN*/);
+        admin.setProfileType(ProfileType.ADMIN.toString()/*ادمین*/);
+        entityManager.persist(admin);
+
+        entityManager.getTransaction().commit();
+
+        entityManager.createQuery("from Profile", Profile.class).getResultList()
+                .forEach(System.out::println);
+        System.out.println();
+        entityManager.createQuery("from Admin", Admin.class).getResultList()
+                .forEach(System.out::println);
+        System.out.println();
+        entityManager.createQuery("from Customer ", Customer.class).getResultList()
+                .forEach(System.out::println);
+
+
+//   minio
     }
 
     private static void testProjectionWithNativeQuery() {
